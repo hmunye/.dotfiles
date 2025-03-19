@@ -1,9 +1,5 @@
 .git
-kitty
 linux
 macos
-vscode
-wezterm
-zed
 .gitignore
 ^/README.*
