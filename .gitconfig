@@ -1,0 +1,10 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Huseen
+	email = 136820327+hmunye@users.noreply.github.com
+[init]
+	defaultBranch = main
+[color]
+	ui = auto
+[core]
+	excludesfile = ~/.dotfiles/.gitignore_global

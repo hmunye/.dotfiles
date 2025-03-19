@@ -1,0 +1,509 @@
+vim.g.mapleader = " "
+vim.g.netrw_browse_split = 0
+vim.g.netrw_banner = 0
+vim.g.netrw_winsize = 25
+
+vim.keymap.set("n", "-", vim.cmd.Ex)
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set('n', "<leader>f", "<cmd>%s/\\s\\+$//e<CR>gg=G``")
+vim.keymap.set("n", "<C-h>", "<C-w><C-h>")
+vim.keymap.set("n", "<C-l>", "<C-w><C-l>")
+vim.keymap.set("n", "<C-j>", "<C-w><C-j>")
+vim.keymap.set("n", "<C-k>", "<C-w><C-k>")
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+vim.opt.mouse = "a"
+vim.opt.guicursor = ""
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.smartcase = true
+vim.opt.ignorecase = true
+vim.opt.wrap = false
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+vim.opt.termguicolors = true
+vim.schedule(function()
+    vim.opt.clipboard = 'unnamedplus'
+end)
+vim.opt.scrolloff = 10
+vim.opt.signcolumn = "yes"
+vim.opt.updatetime = 50
+vim.opt.timeoutlen = 300
+vim.opt.colorcolumn = "80"
+vim.opt.spelllang = "en_us"
+vim.opt.spell = true
+
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable",
+        lazypath,
+    })
+end
+vim.opt.rtp:prepend(lazypath)
+require("lazy").setup({
+    {
+        "rose-pine/neovim",
+        name = "rose-pine",
+        lazy = false,
+        priority = 1000,
+        config = function()
+            require("rose-pine").setup({
+                dim_inactive_windows = false,
+                extend_background_behind_borders = true,
+                enable = {
+                    terminal = true,
+                    legacy_highlights = true,
+                    migrations = true,
+                },
+                styles = {
+                    bold = false,
+                    italic = false,
+                    transparency = true,
+                },
+            })
+            vim.cmd("colorscheme rose-pine")
+            vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+            vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+        end
+    },
+    {
+        "llama.nvim",
+        dir = os.getenv("HOME") .. "/Developer/llama.nvim",
+        dependencies = {},
+        config = function()
+            require("llama").setup({
+                model = "mistral:latest",
+                model_options = {
+                    mirostat = 0,
+                    mirostat_eta = 0.1,
+                    mirostat_tau = 5.0,
+                    num_ctx = 8192,
+                    repeat_last_n = 64,
+                    repeat_penalty = 1.1,
+                    temperature = 0.7,
+                    seed = 0,
+                    stop = nil,
+                    num_predict = -1,
+                    top_k = 40,
+                    top_p = 0.9,
+                    min_p = 0.0,
+                },
+                system_message = "",
+                stream = true,
+                chat = {
+                    position = "right",
+                    width = 35.0,
+                    title = "",
+                    title_position = "center",
+                    border = "none",
+                    spinner_color = "#FFFFFF",
+                },
+                prompt = {
+                    position = "bottom",
+                    border = "rounded",
+                    start_insert_mode = true,
+                    highlight_color = "#353535",
+                },
+                keymaps = {
+                    LlamaChat = {
+                        mode = { "n" },
+                        lhs = "<C-c>",
+                    },
+                    LlamaSubmitPrompt = {
+                        mode = { "n", "i" },
+                        lhs = "<CR>",
+                    },
+                },
+            })
+        end,
+    },
+    {
+        "neovim/nvim-lspconfig",
+        dependencies = {
+            "williamboman/mason.nvim",
+            "williamboman/mason-lspconfig.nvim",
+            "j-hui/fidget.nvim",
+            {
+                "folke/lazydev.nvim",
+                ft = "lua",
+                opts = {},
+            },
+            {
+                "saghen/blink.cmp",
+                version = "*",
+                opts = {
+                    keymap = {
+                        preset = "default",
+                        ["<Up>"] = { "select_prev", "fallback" },
+                        ["<Down>"] = { "select_next", "fallback" },
+                        ["<C-space>"] = { "select_and_accept", "fallback" },
+                    },
+
+                    enabled = function()
+                        return not vim.tbl_contains(
+                            { "markdown" },
+                            vim.bo.filetype)
+                    end,
+
+                    appearance = {
+                        use_nvim_cmp_as_default = false,
+                        nerd_font_variant = "mono",
+                    },
+
+                    completion = {
+                        accept = { auto_brackets = { enabled = false } },
+
+                        menu = {
+                            auto_show = true,
+                            draw = {
+                                -- Hide `kind_icons`
+                                columns = { { "label", "label_description", gap = 1 } },
+                            },
+                        },
+
+                        documentation = { auto_show = true, auto_show_delay_ms = 300 },
+                    },
+
+                    cmdline = {
+                        enabled = false
+                    },
+
+                    sources = {
+                        default = { "lsp", "buffer" },
+                        providers = {},
+                    },
+
+                    signature = { enabled = false },
+                },
+            },
+        },
+        config = function()
+            local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+            require("fidget").setup({
+                notification = {
+                    window = {
+                        winblend = 0,
+                    },
+                },
+            })
+
+            require("mason").setup({
+                PATH = "append",
+            })
+
+            require("mason-lspconfig").setup({
+                ensure_installed = {},
+                automatic_installation = false,
+                handlers = {
+                    function(server_name)
+                        require("lspconfig")[server_name].setup({
+                            capabilities = capabilities,
+                        })
+                    end,
+
+                    ["lua_ls"] = function()
+                        require("lspconfig").lua_ls.setup({
+                            capabilities = capabilities,
+                            settings = {
+                                Lua = {
+                                    runtime = { version = "Lua 5.1" },
+                                    diagnostics = {
+                                        globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
+                                    },
+                                },
+                            },
+                        })
+                    end,
+                },
+            })
+
+            vim.diagnostic.config({
+                float = {
+                    focusable = false,
+                    style = "minimal",
+                    border = "rounded",
+                    source = true,
+                    header = "",
+                    prefix = "",
+                },
+            })
+        end,
+    },
+    {
+        "nvimtools/none-ls.nvim",
+        opts = function()
+            local nls = require("null-ls")
+
+            nls.setup({
+                sources = {
+                    nls.builtins.formatting.biome.with({
+                        filetypes = {
+                            "javascript",
+                            "javascriptreact",
+                            "json",
+                            "jsonc",
+                            "typescript",
+                            "typescriptreact",
+                            "css",
+                        },
+                        args = {
+                            "check",
+                            "--write",
+                            "--unsafe",
+                            "--formatter-enabled=true",
+                            "--organize-imports-enabled=true",
+                            "--skip-errors",
+                            "--stdin-file-path=$FILENAME",
+                        },
+                    }),
+                    -- nls.builtins.formatting.stylua,
+                    -- nls.builtins.diagnostics.selene
+                },
+            })
+        end,
+    },
+    {
+        "mfussenegger/nvim-dap",
+        dependencies = {
+            "rcarriga/nvim-dap-ui",
+            "nvim-neotest/nvim-nio",
+        },
+        config = function()
+            local dap, dapui = require("dap"), require("dapui")
+
+            dapui.setup({
+                controls = {
+                    enabled = false,
+                },
+            })
+
+            dap.listeners.before.attach.dapui_config = function()
+                dapui.open()
+            end
+            dap.listeners.before.launch.dapui_config = function()
+                dapui.open()
+            end
+            dap.listeners.before.event_terminated.dapui_config = function()
+                dapui.close()
+            end
+            dap.listeners.before.event_exited.dapui_config = function()
+                dapui.close()
+            end
+
+            dap.adapters.lldb = {
+                type = "executable",
+                command = os.getenv("HOME") .. "/.local/share/nvim/mason/bin/codelldb",
+                name = "lldb",
+            }
+
+            dap.configurations.c = {
+                {
+                    name = "Launch",
+                    type = "lldb",
+                    request = "launch",
+                    program = function()
+                        return vim.fn.input("Executable: ", vim.fn.getcwd() .. "/", "file")
+                    end,
+                    cwd = "${workspaceFolder}",
+                    stopOnEntry = false,
+                    args = function()
+                        return vim.split(vim.fn.input("Arguments: "), " ")
+                    end,
+                    runInTerminal = true,
+                },
+            }
+
+            vim.keymap.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<CR>")
+            vim.keymap.set("n", "<leader>dc", "<cmd>DapClearBreakpoints<CR>")
+            vim.keymap.set("n", "<leader>dr", "<cmd>DapContinue<CR>")
+            vim.keymap.set("n", "<leader>dt", "<cmd>DapTerminate<CR>")
+            vim.keymap.set("n", "<C-s>", "<cmd>DapStepOver<CR>")
+            vim.keymap.set("n", "<C-S>", "<cmd>DapStepInto<CR>")
+        end,
+    },
+    {
+        'stevearc/oil.nvim',
+        opts = {},
+        config = function()
+            require("oil").setup({
+                view_options = {
+                    show_hidden = true
+                },
+            })
+
+            vim.keymap.set("n", "-", "<CMD>Oil<CR>")
+        end,
+
+    },
+    {
+        "nvim-telescope/telescope.nvim",
+        branch = "0.1.x",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+            require("telescope").setup({
+                pickers = {
+                    find_files = {
+                        hidden = true,
+                    },
+                },
+            })
+
+            local builtin = require("telescope.builtin")
+
+            vim.keymap.set("n", "<leader>ff", builtin.find_files)
+            vim.keymap.set("n", "<leader>fg", builtin.git_files)
+            vim.keymap.set("n", "<leader>fs", function()
+                builtin.grep_string({ search = vim.fn.input("Grep > ") })
+            end)
+        end,
+    },
+    {
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+        config = function()
+            require("nvim-treesitter.configs").setup({
+                ensure_installed = {},
+                sync_install = false,
+                auto_install = true,
+                indent = { enable = true },
+                highlight = {
+                    enable = true,
+                    disable = function(_, buf)
+                        local max_filesize = 100 * 1024 -- 100 KB
+                        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+                        if ok and stats and stats.size > max_filesize then
+                            vim.notify(
+                                "File larger than 100KB treesitter disabled for performance",
+                                vim.log.levels.WARN,
+                                { title = "Treesitter" }
+                            )
+                            return true
+                        end
+                    end,
+                    additional_vim_regex_highlighting = { "markdown" },
+                },
+            })
+        end,
+    },
+    {
+        "mbbill/undotree",
+        config = function()
+            vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+        end,
+    },
+    change_detection = { notify = false },
+})
+
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
+
+local hm_group = augroup("HM", {})
+local swift_lsp = augroup("SwiftLSP", { clear = true })
+local yank_group = augroup("HighlightYank", {})
+
+autocmd("LspAttach", {
+    group = hm_group,
+    callback = function(e)
+        local opts = { buffer = e.buf }
+
+        vim.keymap.set("n", "gd", function()
+            vim.lsp.buf.definition()
+        end, opts)
+        vim.keymap.set("n", "gr", function()
+            vim.lsp.buf.references()
+        end, opts)
+        vim.keymap.set("n", "K", function()
+            vim.lsp.buf.hover()
+        end, opts)
+        vim.keymap.set("n", "<leader>ws", function()
+            vim.lsp.buf.workspace_symbol()
+        end, opts)
+        vim.keymap.set("n", "<leader>ca", function()
+            vim.lsp.buf.code_action()
+        end, opts)
+        vim.keymap.set("n", "<leader>rn", function()
+            vim.lsp.buf.rename()
+        end, opts)
+        vim.keymap.set("i", "<C-h>", function()
+            vim.lsp.buf.signature_help()
+        end, opts)
+        vim.keymap.set("n", "<leader>vd", function()
+            vim.diagnostic.open_float()
+        end, opts)
+        vim.keymap.set("n", "[f", function()
+            vim.diagnostic.goto_next()
+        end, opts)
+        vim.keymap.set("n", "]f", function()
+            vim.diagnostic.goto_prev()
+        end, opts)
+
+        local client = vim.lsp.get_client_by_id(e.data.client_id)
+
+        if not client then
+            return
+        end
+
+        if client.supports_method("textDocument/formatting") then
+            autocmd("BufWritePre", {
+                buffer = e.buf,
+                callback = function()
+                    vim.lsp.buf.format({ bufnr = e.buf, id = client.id })
+                end,
+            })
+        end
+    end,
+})
+
+autocmd("FileType", {
+    group = swift_lsp,
+    pattern = { "*.swift" },
+    callback = function()
+        local root_dir = vim.fs.dirname(vim.fs.find({
+            "Package.swift",
+            ".git",
+        }, { upward = true })[1])
+
+        if not root_dir then
+            return
+        end
+
+        local client = vim.lsp.start({
+            name = "sourcekit-lsp",
+            cmd = { "sourcekit-lsp" },
+            root_dir = root_dir,
+        })
+
+        if client then
+            vim.lsp.buf_attach_client(0, client)
+        end
+    end,
+})
+
+autocmd("TextYankPost", {
+    group = yank_group,
+    pattern = "*",
+    callback = function()
+        vim.highlight.on_yank({
+            higroup = "IncSearch",
+            timeout = 40,
+        })
+    end,
+})
