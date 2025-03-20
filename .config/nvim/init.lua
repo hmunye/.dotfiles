@@ -158,7 +158,7 @@ require("lazy").setup({
 
                     enabled = function()
                         return not vim.tbl_contains(
-                            { "markdown" },
+                            { "c", "markdown" },
                             vim.bo.filetype)
                     end,
 
