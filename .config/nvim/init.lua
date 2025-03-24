@@ -158,7 +158,7 @@ require("lazy").setup({
 
                     enabled = function()
                         return not vim.tbl_contains(
-                            { "c", "markdown" },
+                            { "markdown" },
                             vim.bo.filetype)
                     end,
 
@@ -186,7 +186,7 @@ require("lazy").setup({
                     },
 
                     sources = {
-                        default = { "lsp", "buffer" },
+                        default = { "lsp", "buffer", "path" },
                         providers = {},
                     },
 
@@ -230,6 +230,11 @@ require("lazy").setup({
                                     },
                                 },
                             },
+                        })
+                    end,
+                    ["clangd"] = function()
+                        require("lspconfig").clangd.setup({
+                            enabled = false,
                         })
                     end,
                 },
