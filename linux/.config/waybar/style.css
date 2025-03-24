@@ -1,6 +1,6 @@
 * {
     font-family: "Iosevka NF";
-    font-size: 15px;
+    font-size: 14px;
     padding: 0px 4px 0px 4px;
 }
 
@@ -10,8 +10,9 @@ window#waybar {
 }
 
 tooltip {
+    color: #FEFFED;
     background-color: #24272B;
-    border-radius: 10px;
+    border-radius: 1px;
 }
 
 .modules-left > widget:first-child > #workspaces {
@@ -24,15 +25,15 @@ tooltip {
 
 #workspaces button {
     color: #FEFFED;
-    border-radius: 10px;
+    border-radius: 1px;
     padding: 0px 2px;
     margin: 6px 6px; 
-    background-color: #24272B;
 }
 
 #workspaces button.active {
     color: #FEFFED;
     background-color: #696773;
+    border-radius: 1px;
 }
 
 #custom-vm,
@@ -46,7 +47,6 @@ tooltip {
 #tray {
     padding: 3px 12px;
     margin: 5px 5px; 
-    border-radius: 10px;
 }
 
 #network,
@@ -56,38 +56,32 @@ tooltip {
 #clock,
 #privacy,
 #tray {
-    background-color: #24272B;
     color: #FEFFED;
 }
 
 #custom-vm {
     font-size: 18px;
     padding-right: 20px;
-    background-color: #24272B;
     color: #0A81D1;
 }
 
 #network.disconnected {
-    background-color: #F24333;
+    color: #F24333;
 }
 
 #bluetooth {
-    background-color: #0A81D1;
-    color: #FEFFED;
+    color: #0A81D1;
 }
 
 #bluetooth.disabled {
-    background-color: #A89B9D;
-    color: #FEFFED;
+    color: #A89B9D;
 }
 
 #bluetooth.no-controller,
 #bluetooth.off {
-    background-color: #F24333;
-    color: #FEFFED;
+    color: #F24333;
 }
 
 #wireplumber.muted {
-    background-color: #A89B9D;
-    color: #FEFFED;
+    color: #A89B9D;
 }
