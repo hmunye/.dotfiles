@@ -12,4 +12,4 @@ else
   shell="bash"
 fi
 
-tmux neww $shell -c "find -L $dirs -type f | fzf -e | xargs man"
+tmux neww $shell -c "find -L $dirs -type f | fzf | xargs man"

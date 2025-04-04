@@ -5,7 +5,6 @@ vim.g.netrw_winsize = 25
 
 vim.keymap.set("n", "-", vim.cmd.Ex)
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set('n', "<leader>f", "<cmd>%s/\\s\\+$//e<CR>gg=G``")
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>")
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>")
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>")
@@ -45,6 +44,9 @@ vim.opt.colorcolumn = "80"
 vim.opt.spelllang = "en_us"
 vim.opt.spell = true
 
+-- Built-in auto-completion fix
+vim.cmd("set completeopt+=noselect")
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
@@ -59,37 +61,12 @@ end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     {
-        "rose-pine/neovim",
-        name = "rose-pine",
-        lazy = false,
-        priority = 1000,
-        config = function()
-            require("rose-pine").setup({
-                dim_inactive_windows = false,
-                extend_background_behind_borders = true,
-                enable = {
-                    terminal = true,
-                    legacy_highlights = true,
-                    migrations = true,
-                },
-                styles = {
-                    bold = false,
-                    italic = false,
-                    transparency = true,
-                },
-            })
-            vim.cmd("colorscheme rose-pine")
-            vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-            vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-        end
-    },
-    {
         "llama.nvim",
         dir = os.getenv("HOME") .. "/Developer/llama.nvim",
         dependencies = {},
         config = function()
             require("llama").setup({
-                model = "mistral:latest",
+                model = "gemma3:12b",
                 model_options = {
                     mirostat = 0,
                     mirostat_eta = 0.1,
@@ -105,11 +82,11 @@ require("lazy").setup({
                     top_p = 0.9,
                     min_p = 0.0,
                 },
-                system_message = "",
+                system_message = [[]],
                 stream = true,
                 chat = {
                     position = "right",
-                    width = 35.0,
+                    width = 45.0,
                     title = "",
                     title_position = "center",
                     border = "none",
@@ -126,6 +103,7 @@ require("lazy").setup({
                         mode = { "n" },
                         lhs = "<C-c>",
                     },
+
                     LlamaSubmitPrompt = {
                         mode = { "n", "i" },
                         lhs = "<CR>",
@@ -135,68 +113,69 @@ require("lazy").setup({
         end,
     },
     {
-        "neovim/nvim-lspconfig",
+        "thimc/gruber-darker.nvim",
+        name = "gruber-darker",
+        config = function()
+            require("gruber-darker").setup({
+                transparent = true,
+                bold = false,
+            })
+            vim.cmd.colorscheme("gruber-darker")
+            vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+            vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+        end,
+    },
+    --    {
+    --        "vague2k/vague.nvim",
+    --        name = "rose-pine-mute",
+    --        config = function()
+    --            require("vague").setup({
+    --                transparent = true,
+    --                style = {
+    --                    boolean = "none",
+    --                    number = "none",
+    --                    float = "none",
+    --                    error = "none",
+    --                    comments = "none",
+    --                    conditionals = "none",
+    --                    functions = "none",
+    --                    headings = "none",
+    --                    operators = "none",
+    --                    strings = "none",
+    --                    variables = "none",
+    --                    keywords = "none",
+    --                    keyword_return = "none",
+    --                    keywords_loop = "none",
+    --                    keywords_label = "none",
+    --                    keywords_exception = "none",
+    --                    builtin_constants = "none",
+    --                    builtin_functions = "none",
+    --                    builtin_types = "none",
+    --                    builtin_variables = "none",
+    --                },
+    --                colors = {
+    --                    func = "#bc96b0",
+    --                    keyword = "#787bab",
+    --                    string = "#d4bd98",
+    --                    number = "#8f729e",
+    --                },
+    --            })
+    --            vim.cmd("colorscheme vague")
+    --            vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+    --            vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+    --        end
+    --    },
+    {
+        "williamboman/mason.nvim",
         dependencies = {
-            "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
             "j-hui/fidget.nvim",
             {
                 "folke/lazydev.nvim",
                 ft = "lua",
                 opts = {},
             },
-            {
-                "saghen/blink.cmp",
-                version = "*",
-                opts = {
-                    keymap = {
-                        preset = "default",
-                        ["<Up>"] = { "select_prev", "fallback" },
-                        ["<Down>"] = { "select_next", "fallback" },
-                        ["<C-space>"] = { "select_and_accept", "fallback" },
-                    },
-
-                    enabled = function()
-                        return not vim.tbl_contains(
-                            { "markdown" },
-                            vim.bo.filetype)
-                    end,
-
-                    appearance = {
-                        use_nvim_cmp_as_default = false,
-                        nerd_font_variant = "mono",
-                    },
-
-                    completion = {
-                        accept = { auto_brackets = { enabled = false } },
-
-                        menu = {
-                            auto_show = true,
-                            draw = {
-                                -- Hide `kind_icons`
-                                columns = { { "label", "label_description", gap = 1 } },
-                            },
-                        },
-
-                        documentation = { auto_show = true, auto_show_delay_ms = 300 },
-                    },
-
-                    cmdline = {
-                        enabled = false
-                    },
-
-                    sources = {
-                        default = { "lsp", "buffer", "path" },
-                        providers = {},
-                    },
-
-                    signature = { enabled = false },
-                },
-            },
         },
         config = function()
-            local capabilities = require("blink.cmp").get_lsp_capabilities()
-
             require("fidget").setup({
                 notification = {
                     window = {
@@ -209,36 +188,27 @@ require("lazy").setup({
                 PATH = "append",
             })
 
-            require("mason-lspconfig").setup({
-                ensure_installed = {},
-                automatic_installation = false,
-                handlers = {
-                    function(server_name)
-                        require("lspconfig")[server_name].setup({
-                            capabilities = capabilities,
-                        })
-                    end,
-
-                    ["lua_ls"] = function()
-                        require("lspconfig").lua_ls.setup({
-                            capabilities = capabilities,
-                            settings = {
-                                Lua = {
-                                    runtime = { version = "Lua 5.1" },
-                                    diagnostics = {
-                                        globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
-                                    },
-                                },
-                            },
-                        })
-                    end,
-                    ["clangd"] = function()
-                        require("lspconfig").clangd.setup({
-                            enabled = false,
-                        })
-                    end,
+            vim.lsp.config["lua_ls"] = {
+                cmd = { "lua-language-server" },
+                filetypes = { "lua" },
+                root_markers = { "" },
+                settings = {
+                    Lua = {
+                        runtime = { version = "LuaJIT" },
+                        diagnostics = {
+                            globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
+                        },
+                    },
                 },
-            })
+            }
+
+            vim.lsp.config["clangd"] = {
+                cmd = { "clangd" },
+                root_markers = { "" },
+                filetypes = { "c", "cpp" }
+            }
+
+            vim.lsp.enable({ "lua_ls" })
 
             vim.diagnostic.config({
                 float = {
@@ -249,39 +219,7 @@ require("lazy").setup({
                     header = "",
                     prefix = "",
                 },
-            })
-        end,
-    },
-    {
-        "nvimtools/none-ls.nvim",
-        opts = function()
-            local nls = require("null-ls")
-
-            nls.setup({
-                sources = {
-                    nls.builtins.formatting.biome.with({
-                        filetypes = {
-                            "javascript",
-                            "javascriptreact",
-                            "json",
-                            "jsonc",
-                            "typescript",
-                            "typescriptreact",
-                            "css",
-                        },
-                        args = {
-                            "check",
-                            "--write",
-                            "--unsafe",
-                            "--formatter-enabled=true",
-                            "--organize-imports-enabled=true",
-                            "--skip-errors",
-                            "--stdin-file-path=$FILENAME",
-                        },
-                    }),
-                    -- nls.builtins.formatting.stylua,
-                    -- nls.builtins.diagnostics.selene
-                },
+                virtual_text = true,
             })
         end,
     },
@@ -338,8 +276,10 @@ require("lazy").setup({
 
             vim.keymap.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<CR>")
             vim.keymap.set("n", "<leader>dc", "<cmd>DapClearBreakpoints<CR>")
+
             vim.keymap.set("n", "<leader>dr", "<cmd>DapContinue<CR>")
             vim.keymap.set("n", "<leader>dt", "<cmd>DapTerminate<CR>")
+
             vim.keymap.set("n", "<C-s>", "<cmd>DapStepOver<CR>")
             vim.keymap.set("n", "<C-S>", "<cmd>DapStepInto<CR>")
         end,
@@ -414,14 +354,34 @@ require("lazy").setup({
             vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
         end,
     },
+    {
+        "folke/zen-mode.nvim",
+        config = function()
+            vim.keymap.set("n", "<leader>zz", function()
+                require("zen-mode").setup {
+                    window = {
+                        width = 90,
+                        options = {}
+                    },
+                }
+
+                require("zen-mode").toggle()
+                vim.wo.wrap = false
+                vim.wo.number = true
+                vim.wo.rnu = true
+            end)
+        end
+    },
     change_detection = { notify = false },
 })
+
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
 local hm_group = augroup("HM", {})
-local swift_lsp = augroup("SwiftLSP", { clear = true })
+local swift_lsp = augroup("Swift", { clear = true })
+local clang_fmt = augroup("Clang", { clear = true })
 local yank_group = augroup("HighlightYank", {})
 
 autocmd("LspAttach", {
@@ -450,15 +410,6 @@ autocmd("LspAttach", {
         vim.keymap.set("i", "<C-h>", function()
             vim.lsp.buf.signature_help()
         end, opts)
-        vim.keymap.set("n", "<leader>vd", function()
-            vim.diagnostic.open_float()
-        end, opts)
-        vim.keymap.set("n", "[f", function()
-            vim.diagnostic.goto_next()
-        end, opts)
-        vim.keymap.set("n", "]f", function()
-            vim.diagnostic.goto_prev()
-        end, opts)
 
         local client = vim.lsp.get_client_by_id(e.data.client_id)
 
@@ -466,13 +417,17 @@ autocmd("LspAttach", {
             return
         end
 
-        if client.supports_method("textDocument/formatting") then
+        if client:supports_method("textDocument/formatting") then
             autocmd("BufWritePre", {
                 buffer = e.buf,
                 callback = function()
                     vim.lsp.buf.format({ bufnr = e.buf, id = client.id })
                 end,
             })
+        end
+
+        if client:supports_method('textDocument/completion') then
+            vim.lsp.completion.enable(true, client.id, e.buf, { autotrigger = true })
         end
     end,
 })
@@ -499,6 +454,20 @@ autocmd("FileType", {
         if client then
             vim.lsp.buf_attach_client(0, client)
         end
+    end,
+})
+
+autocmd("BufWritePre", {
+    group = clang_fmt,
+    pattern = { "*.c", "*.h" },
+    callback = function()
+        if vim.fn.executable("clang-format") == 0 then
+            return
+        end
+
+        local cursor = vim.api.nvim_win_get_cursor(0)
+        vim.cmd("%!clang-format")
+        vim.api.nvim_win_set_cursor(0, cursor)
     end,
 })
 
