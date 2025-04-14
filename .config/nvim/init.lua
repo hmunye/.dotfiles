@@ -45,7 +45,7 @@ vim.opt.spelllang = "en_us"
 vim.opt.spell = true
 
 -- Built-in auto-completion fix
-vim.cmd("set completeopt+=noselect")
+-- vim.cmd("set completeopt+=noselect")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -195,19 +195,21 @@ require("lazy").setup({
                 filetypes = { "c", "cpp" }
             }
 
-            vim.lsp.enable({ "lua_ls" })
+            vim.lsp.enable({ "lua_ls", "clangd" })
 
-            vim.diagnostic.config({
-                float = {
-                    focusable = false,
-                    style = "minimal",
-                    border = "rounded",
-                    source = true,
-                    header = "",
-                    prefix = "",
-                },
-                virtual_text = true,
-            })
+            vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+
+            --            vim.diagnostic.config({
+            --                float = {
+            --                    focusable = false,
+            --                    style = "minimal",
+            --                    border = "rounded",
+            --                    source = true,
+            --                    header = "",
+            --                    prefix = "",
+            --                },
+            --                virtual_text = true,
+            --            })
         end,
     },
     {
@@ -413,9 +415,9 @@ autocmd("LspAttach", {
             })
         end
 
-        if client:supports_method('textDocument/completion') then
-            vim.lsp.completion.enable(true, client.id, e.buf, { autotrigger = true })
-        end
+        --        if client:supports_method('textDocument/completion') then
+        --            vim.lsp.completion.enable(true, client.id, e.buf, { autotrigger = true })
+        --        end
     end,
 })
 
@@ -441,20 +443,6 @@ autocmd("FileType", {
         if client then
             vim.lsp.buf_attach_client(0, client)
         end
-    end,
-})
-
-autocmd("BufWritePre", {
-    group = clang_fmt,
-    pattern = { "*.c", "*.h" },
-    callback = function()
-        if vim.fn.executable("clang-format") == 0 then
-            return
-        end
-
-        local cursor = vim.api.nvim_win_get_cursor(0)
-        vim.cmd("%!clang-format")
-        vim.api.nvim_win_set_cursor(0, cursor)
     end,
 })
 
