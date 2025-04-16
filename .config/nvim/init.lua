@@ -370,7 +370,6 @@ local autocmd = vim.api.nvim_create_autocmd
 
 local hm_group = augroup("HM", {})
 local swift_lsp = augroup("Swift", { clear = true })
-local clang_fmt = augroup("Clang", { clear = true })
 local yank_group = augroup("HighlightYank", {})
 
 autocmd("LspAttach", {
