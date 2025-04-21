@@ -6,7 +6,7 @@
 
 window#waybar {
     color: #FEFFED;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(25, 25, 25, 0.95);
 }
 
 tooltip {
@@ -36,7 +36,6 @@ tooltip {
     border-radius: 1px;
 }
 
-#custom-vm,
 #network,
 #cpu,
 #memory,
@@ -57,12 +56,6 @@ tooltip {
 #privacy,
 #tray {
     color: #FEFFED;
-}
-
-#custom-vm {
-    font-size: 18px;
-    padding-right: 20px;
-    color: #0A81D1;
 }
 
 #network.disconnected {

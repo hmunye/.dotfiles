@@ -12,6 +12,7 @@ Config(
   max_entries: None,
   plugins: [
     "libapplications.so",
-    "libwebsearch.so"
+    "libwebsearch.so",
+    "libstdin.so"
   ],
 )
