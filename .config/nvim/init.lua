@@ -113,43 +113,22 @@ require("lazy").setup({
         end,
     },
     {
-        "vague2k/vague.nvim",
-        name = "rose-pine-mute",
+        "blazkowolf/gruber-darker.nvim",
+        name = "gruber-darker",
         config = function()
-            require("vague").setup({
-                transparent = true,
-                style = {
-                    boolean = "none",
-                    number = "none",
-                    float = "none",
-                    error = "none",
-                    comments = "none",
-                    conditionals = "none",
-                    functions = "none",
-                    headings = "none",
-                    operators = "none",
-                    strings = "none",
-                    variables = "none",
-                    keywords = "none",
-                    keyword_return = "none",
-                    keywords_loop = "none",
-                    keywords_label = "none",
-                    keywords_exception = "none",
-                    builtin_constants = "none",
-                    builtin_functions = "none",
-                    builtin_types = "none",
-                    builtin_variables = "none",
-                },
-                colors = {
-                    func = "#bc96b0",
-                    keyword = "#787bab",
-                    string = "#d4bd98",
-                    number = "#8f729e",
+            require("gruber-darker").setup({
+                bold = false,
+                italic = {
+                    strings = false,
+                    comments = false,
+                    operators = false,
+                    folds = false
                 },
             })
-            vim.cmd("colorscheme vague")
+            vim.cmd("colorscheme gruber-darker")
             vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
             vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+            vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
         end
     },
     {
