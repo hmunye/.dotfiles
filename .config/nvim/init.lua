@@ -157,11 +157,6 @@ require("lazy").setup({
         "williamboman/mason.nvim",
         dependencies = {
             "j-hui/fidget.nvim",
-            {
-                "folke/lazydev.nvim",
-                ft = "lua",
-                opts = {},
-            },
         },
         config = function()
             require("fidget").setup({
@@ -192,11 +187,20 @@ require("lazy").setup({
 
             vim.lsp.config["clangd"] = {
                 cmd = { "clangd" },
-                root_markers = { "" },
-                filetypes = { "c", "cpp" }
+                filetypes = { "c", "cpp" },
+                root_markers = { "" }
             }
 
-            vim.lsp.enable({ "lua_ls", "clangd" })
+            vim.lsp.config["rust_analyzer"] = {
+                cmd = { "rustup", "run", "stable", "rust-analyzer" },
+                filetypes = { "rust" },
+                root_markers = { "Cargo.toml" },
+                settings = {
+                    ["rust_analyzer"] = {}
+                }
+            }
+
+            vim.lsp.enable({ "lua_ls", "clangd", "rust_analyzer" })
 
             vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 
