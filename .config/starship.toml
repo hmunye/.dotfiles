@@ -30,6 +30,14 @@ $character"""
 [fill]
 symbol = " "
 
+[username]
+disabled = false
+format = "[$user]($style) "
+
+[hostname]
+disabled = false
+format = "[$hostname]($style) | "
+
 [directory]
 style = "white"
 read_only = " 󰌾"
