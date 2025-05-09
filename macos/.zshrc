@@ -6,6 +6,8 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export EDITOR="nvim"
 export MANPAGER="nvim +Man!"
 
+export CC=gcc-14
+
 bindkey -s '^f' '^u~/.dotfiles/.local/bin/tmux-session.sh^M'
 
 HISTFILE=$HOME/.zsh_history

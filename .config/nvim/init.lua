@@ -13,10 +13,10 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set('n', '<left>', '')
-vim.keymap.set('n', '<right>', '')
-vim.keymap.set('n', '<up>', '')
-vim.keymap.set('n', '<down>', '')
+-- vim.keymap.set("n", "<left>", "")
+-- vim.keymap.set("n", "<right>", "")
+-- vim.keymap.set("n", "<up>", "")
+-- vim.keymap.set("n", "<down>", "")
 
 vim.opt.mouse = "a"
 vim.opt.guicursor = ""
@@ -200,7 +200,11 @@ require("lazy").setup({
                 filetypes = { "rust" },
                 root_markers = { "Cargo.toml" },
                 settings = {
-                    ["rust_analyzer"] = {}
+                    ["rust_analyzer"] = {
+                        cargo = {
+                            allFeatures = true,
+                        }
+                    }
                 }
             }
 
