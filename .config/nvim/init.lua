@@ -13,10 +13,10 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
--- vim.keymap.set("n", "<left>", "")
--- vim.keymap.set("n", "<right>", "")
--- vim.keymap.set("n", "<up>", "")
--- vim.keymap.set("n", "<down>", "")
+vim.keymap.set("n", "<left>", "")
+vim.keymap.set("n", "<right>", "")
+vim.keymap.set("n", "<up>", "")
+vim.keymap.set("n", "<down>", "")
 
 vim.opt.mouse = "a"
 vim.opt.guicursor = ""
@@ -377,12 +377,10 @@ require("lazy").setup({
     change_detection = { notify = false },
 })
 
-
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
 local hm_group = augroup("HM", {})
-local swift_lsp = augroup("Swift", { clear = true })
 local yank_group = augroup("HighlightYank", {})
 
 autocmd("LspAttach", {
@@ -430,31 +428,6 @@ autocmd("LspAttach", {
         --        if client:supports_method('textDocument/completion') then
         --            vim.lsp.completion.enable(true, client.id, e.buf, { autotrigger = true })
         --        end
-    end,
-})
-
-autocmd("FileType", {
-    group = swift_lsp,
-    pattern = { "*.swift" },
-    callback = function()
-        local root_dir = vim.fs.dirname(vim.fs.find({
-            "Package.swift",
-            ".git",
-        }, { upward = true })[1])
-
-        if not root_dir then
-            return
-        end
-
-        local client = vim.lsp.start({
-            name = "sourcekit-lsp",
-            cmd = { "sourcekit-lsp" },
-            root_dir = root_dir,
-        })
-
-        if client then
-            vim.lsp.buf_attach_client(0, client)
-        end
     end,
 })
 
