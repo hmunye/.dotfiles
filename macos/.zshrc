@@ -1,6 +1,8 @@
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 
+export PATH="$HOME/.docker/bin:$PATH"
+
 export HOMEBREW_NO_EMOJI=1
 export HOMEBREW_NO_AUTO_UPDATE=1
 export EDITOR="nvim"
