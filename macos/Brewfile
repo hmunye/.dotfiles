@@ -1,25 +1,10 @@
-# Command-line fuzzy finder written in Go
 brew "fzf"
-# GNU compiler collection
 brew "gcc"
-# Improved top (interactive process viewer)
 brew "htop"
-# Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-# Create, run, and share large language models (LLMs)
-brew "ollama"
-# Search tool like grep and The Silver Searcher
-brew "ripgrep"
-# Rust toolchain installer
 brew "rustup"
-# Cross-shell prompt for astronauts
 brew "starship"
-# Terminal multiplexer
 brew "tmux"
 cask "font-iosevka-term-nerd-font"
-# Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
-# Clipboard manager
 cask "maccy"
-# Knowledge base that works on top of a local folder of plain text Markdown files
-cask "obsidian"
