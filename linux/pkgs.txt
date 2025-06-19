@@ -29,7 +29,6 @@ nvidia-utils 570.153.02-1
 openssh 10.0p1-3
 paru 2.0.4-1
 pipewire-pulse 1:1.4.2-1
-ripgrep 14.1.1-1
 starship 1.23.0-1
 tmux 3.5_a-1
 ttf-iosevka-nerd 3.4.0-1

@@ -1,6 +1,7 @@
 [[ $- != *i* ]] && return
 
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.node/current/bin:$PATH"
 
 export EDITOR="nvim"
 export MANPAGER="nvim +Man!"

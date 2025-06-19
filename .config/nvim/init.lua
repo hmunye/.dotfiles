@@ -88,6 +88,27 @@ require("lazy").setup({
         end
     },
     {
+        "nvim-telescope/telescope.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+            require("telescope").setup({
+                pickers = {
+                    find_files = {
+                        hidden = true,
+                    },
+                },
+            })
+
+            local builtin = require("telescope.builtin")
+
+            vim.keymap.set("n", "<leader>ff", builtin.find_files)
+            vim.keymap.set("n", "<leader>fg", builtin.git_files)
+            vim.keymap.set("n", "<leader>fs", function()
+                builtin.grep_string({ search = vim.fn.input("Grep > ") })
+            end)
+        end,
+    },
+    {
         'stevearc/oil.nvim',
         opts = {},
         config = function()
@@ -129,7 +150,13 @@ vim.lsp.config["rust_analyzer"] = {
     }
 }
 
-vim.lsp.enable({ "clangd", "rust_analyzer" })
+vim.lsp.config["ts_ls"] = {
+    cmd = { "typescript-language-server", "--stdio" },
+    filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+    root_markers = { "" }
+}
+
+vim.lsp.enable({ "clangd", "rust_analyzer", "ts_ls" })
 
 vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 
