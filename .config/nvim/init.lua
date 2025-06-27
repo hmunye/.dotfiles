@@ -42,7 +42,7 @@ vim.opt.updatetime = 50
 vim.opt.timeoutlen = 300
 vim.opt.colorcolumn = "80"
 vim.opt.spelllang = "en_us"
-vim.opt.spell = true
+vim.opt.spell = false
 vim.opt.spellfile = os.getenv("HOME") .. "/.config/nvim/spell/en.add"
 
 -- Built-in auto-completion fix
@@ -122,12 +122,6 @@ require("lazy").setup({
         end,
 
     },
-    {
-        "mbbill/undotree",
-        config = function()
-            vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
-        end,
-    },
     change_detection = { notify = false },
 })
 
@@ -150,13 +144,7 @@ vim.lsp.config["rust_analyzer"] = {
     }
 }
 
-vim.lsp.config["ts_ls"] = {
-    cmd = { "typescript-language-server", "--stdio" },
-    filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
-    root_markers = { "" }
-}
-
-vim.lsp.enable({ "clangd", "rust_analyzer", "ts_ls" })
+vim.lsp.enable({ "clangd", "rust_analyzer" })
 
 vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 

@@ -1,7 +1,6 @@
 [[ $- != *i* ]] && return
 
 export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.node/current/bin:$PATH"
 
 export EDITOR="nvim"
 export MANPAGER="nvim +Man!"
@@ -18,7 +17,7 @@ bind '"\e[B": history-search-forward'
 bind '"\C-f": "~/.dotfiles/.local/bin/tmux-session.sh\n"'
 
 alias ls='ls --color=auto'
-alias grep='grep --color=auto'
+alias grep='rg --color=always'
 alias vim='nvim'
 
 eval "$(fzf --bash)"
