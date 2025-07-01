@@ -42,7 +42,7 @@ vim.opt.updatetime = 50
 vim.opt.timeoutlen = 300
 vim.opt.colorcolumn = "80"
 vim.opt.spelllang = "en_us"
-vim.opt.spell = false
+vim.opt.spell = true
 vim.opt.spellfile = os.getenv("HOME") .. "/.config/nvim/spell/en.add"
 
 -- Built-in auto-completion fix
