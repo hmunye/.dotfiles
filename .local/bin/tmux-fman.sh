@@ -10,6 +10,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   /Library/Developer/CommandLineTools/usr/share/man"
 else
   shell="bash"
+
+  dirs+=" /usr/local/man/man8"
 fi
 
 tmux neww $shell -c "find -L $dirs -type f | fzf | xargs man"
