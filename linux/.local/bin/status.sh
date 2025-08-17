@@ -5,7 +5,7 @@ echo '['
 echo '[],'
 
 while true; do
-    ip=$(ip -4 addr show dev wlp12s0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}' || echo "DISCONNECTED")
+    ip=$(ip -4 addr show dev wlan0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}' || echo "DISCONNECTED")
     clock=$(date '+%a %b %d %H:%M')
     cpu=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8 "%"}')
     ram=$(free -h | awk '/Mem:/ {print $3 "/" $2}' | sed 's/Gi/G/g')
@@ -21,5 +21,5 @@ while true; do
         echo "  {\"full_text\": \"$clock\", \"name\": \"clock\"}"
     echo "],"
 
-    sleep 5
+    sleep 1
 done

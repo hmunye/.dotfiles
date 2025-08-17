@@ -2,9 +2,12 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.node/current/bin:$PATH"
 
 export EDITOR="nvim"
 export MANPAGER="nvim +Man!"
+
+bind '"\C-f": "~/.dotfiles/.local/bin/tmux-session.sh\n"'
 
 HISTFILE=$HOME/.bash_history      
 SAVEHIST=1000                        
@@ -14,8 +17,6 @@ shopt -s histappend
 PROMPT_COMMAND="history -a; history -n"
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
-
-bind '"\C-f": "~/.dotfiles/.local/bin/tmux-session.sh\n"'
 
 alias ls='ls --color=auto'
 alias grep='rg --color=always'

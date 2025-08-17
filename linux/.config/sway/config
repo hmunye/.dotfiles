@@ -3,7 +3,7 @@
 #################
 
 exec gammastep -l 40.7:-74.0 -t 6400:3000 -g 0.9 -m wayland
-exec pipewire
+# exec pipewire
 
 ##############
 ### Visual ###
@@ -17,7 +17,7 @@ client.unfocused            #393939 #393939 #feffed #393939
 
 bar {
     position bottom
-    font pango:Iosevka 11
+    font pango:Iosevka NF 11
     colors {
         background          #191919e6
         statusline          #feffed
@@ -46,7 +46,7 @@ set $menu ""
 ############################
 ### Output Configuration ###
 ############################
-output * bg ~/.local/share/sway/background/wallpaper.png fill
+output * bg /home/hm/.local/share/sway/background/wallpaper.jpg fill
 
 ##########################
 ### Idle Configuration ###

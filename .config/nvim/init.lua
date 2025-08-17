@@ -62,58 +62,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     {
-        "llama.nvim",
-        dir = os.getenv("HOME") .. "/Developer/llama.nvim",
-        dependencies = {},
-        config = function()
-            require("llama").setup({
-                model = "gemma3:12b",
-                model_options = {
-                    mirostat = 0,
-                    mirostat_eta = 0.1,
-                    mirostat_tau = 5.0,
-                    num_ctx = 8192,
-                    repeat_last_n = 64,
-                    repeat_penalty = 1.1,
-                    temperature = 0.7,
-                    seed = 0,
-                    stop = nil,
-                    num_predict = -1,
-                    top_k = 40,
-                    top_p = 0.9,
-                    min_p = 0.0,
-                },
-                system_message = [[]],
-                stream = true,
-                chat = {
-                    position = "right",
-                    width = 45.0,
-                    title = "",
-                    title_position = "center",
-                    border = "none",
-                    spinner_color = "#FFFFFF",
-                },
-                prompt = {
-                    position = "bottom",
-                    border = "rounded",
-                    start_insert_mode = true,
-                    highlight_color = "#353535",
-                },
-                keymaps = {
-                    LlamaChat = {
-                        mode = { "n" },
-                        lhs = "<C-c>",
-                    },
-
-                    LlamaSubmitPrompt = {
-                        mode = { "n", "i" },
-                        lhs = "<CR>",
-                    },
-                },
-            })
-        end,
-    },
-    {
         "vague2k/vague.nvim",
         name = "rose-pine-mute",
         config = function()
@@ -263,7 +211,13 @@ vim.lsp.config["rust_analyzer"] = {
     }
 }
 
-vim.lsp.enable({ "clangd", "rust_analyzer" })
+vim.lsp.config["ts_ls"] = {
+    cmd = { "typescript-language-server", "--stdio" },
+    filetypes = { "typescript", "javascript" },
+    root_markers = { "" }
+}
+
+vim.lsp.enable({ "clangd", "rust_analyzer", "ts_ls" })
 
 vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 
