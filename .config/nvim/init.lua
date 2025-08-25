@@ -251,7 +251,7 @@ autocmd("LspAttach", {
             vim.lsp.buf.references()
         end, opts)
         vim.keymap.set("n", "K", function()
-            vim.lsp.buf.hover()
+            vim.lsp.buf.hover({ border = "rounded" })
         end, opts)
         vim.keymap.set("n", "<leader>ws", function()
             vim.lsp.buf.workspace_symbol()
@@ -263,7 +263,7 @@ autocmd("LspAttach", {
             vim.lsp.buf.rename()
         end, opts)
         vim.keymap.set("i", "<C-h>", function()
-            vim.lsp.buf.signature_help()
+            vim.lsp.buf.signature_help({ border = "rounded" })
         end, opts)
 
         local client = vim.lsp.get_client_by_id(e.data.client_id)
