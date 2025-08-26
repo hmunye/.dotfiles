@@ -48,149 +48,114 @@ vim.opt.spellfile = os.getenv("HOME") .. "/.config/nvim/spell/en.add"
 -- Built-in auto-completion fix
 -- vim.cmd("set completeopt+=noselect")
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable",
-        lazypath,
-    })
-end
-vim.opt.rtp:prepend(lazypath)
-require("lazy").setup({
+vim.pack.add({
     {
-        "vague2k/vague.nvim",
-        name = "rose-pine-mute",
-        config = function()
-            require("vague").setup({
-                transparent = true,
-                style = {
-                    boolean = "none",
-                    number = "none",
-                    float = "none",
-                    error = "none",
-                    comments = "none",
-                    conditionals = "none",
-                    functions = "none",
-                    headings = "none",
-                    operators = "none",
-                    strings = "none",
-                    variables = "none",
-                    keywords = "none",
-                    keyword_return = "none",
-                    keywords_loop = "none",
-                    keywords_label = "none",
-                    keywords_exception = "none",
-                    builtin_constants = "none",
-                    builtin_functions = "none",
-                    builtin_types = "none",
-                    builtin_variables = "none",
-                },
-                colors = {
-                    func = "#bc96b0",
-                    keyword = "#787bab",
-                    string = "#d4bd98",
-                    number = "#8f729e",
-                },
-            })
-            vim.cmd("colorscheme vague")
-            vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-            vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-            vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
-        end
+        src = "https://github.com/behemothbucket/gruber-darker-theme.nvim",
+        name = "gruber-darker",
+        version = "main",
     },
     {
-        "nvim-telescope/telescope.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" },
-        config = function()
-            require("telescope").setup({
-                pickers = {
-                    find_files = {
-                        hidden = true,
-                    },
-                },
-            })
-
-            local builtin = require("telescope.builtin")
-
-            vim.keymap.set("n", "<leader>ff", builtin.find_files)
-            vim.keymap.set("n", "<leader>fg", builtin.git_files)
-            vim.keymap.set("n", "<leader>fs", function()
-                builtin.grep_string({ search = vim.fn.input("Grep > ") })
-            end)
-        end,
+        src = "https://github.com/nvim-telescope/telescope.nvim",
+        name = "nvim-telescope",
     },
     {
-        "nvim-treesitter/nvim-treesitter",
+        src = "https://github.com/nvim-lua/plenary.nvim",
+        name = "plenary",
+    },
+    {
+        src = "https://github.com/nvim-treesitter/nvim-treesitter",
+        name = "nvim-treesitter",
         build = ":TSUpdate",
-        config = function()
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = {},
-                sync_install = false,
-                auto_install = true,
-                indent = { enable = true },
-                highlight = {
-                    enable = true,
-                    disable = function(_, buf)
-                        local max_filesize = 100 * 1024 -- 100 KB
-                        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-                        if ok and stats and stats.size > max_filesize then
-                            vim.notify(
-                                "File larger than 100KB treesitter disabled for performance",
-                                vim.log.levels.WARN,
-                                { title = "Treesitter" }
-                            )
-                            return true
-                        end
-                    end,
-                    additional_vim_regex_highlighting = { "markdown" },
-                },
-            })
-        end,
     },
     {
-        "stevearc/oil.nvim",
-        opts = {},
-        config = function()
-            require("oil").setup({
-                view_options = {
-                    show_hidden = true
-                },
-            })
-
-            vim.keymap.set("n", "-", "<CMD>Oil<CR>")
-        end,
-
+        src = "https://github.com/stevearc/oil.nvim",
+        name = "oil-nvim",
     },
     {
-        "mbbill/undotree",
-        config = function()
-            vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
-        end,
+        src = "https://github.com/mbbill/undotree",
+        name = "undotree",
     },
     {
-        "folke/zen-mode.nvim",
-        config = function()
-            vim.keymap.set("n", "<leader>zz", function()
-                require("zen-mode").setup {
-                    window = {
-                        width = 110,
-                        options = {}
-                    },
-                }
-
-                require("zen-mode").toggle()
-                vim.wo.wrap = false
-                vim.wo.number = true
-                vim.wo.rnu = true
-            end)
-        end
+        src = "https://github.com/folke/zen-mode.nvim",
+        name = "zen-mode",
+        version = "main",
     },
-    change_detection = { notify = false },
 })
+
+vim.cmd("packadd gruber-darker")
+vim.cmd("packadd nvim-telescope")
+vim.cmd("packadd plenary")
+vim.cmd("packadd nvim-treesitter")
+vim.cmd("packadd oil-nvim")
+vim.cmd("packadd undotree")
+vim.cmd("packadd zen-mode")
+
+require("gruber-darker").setup()
+vim.cmd("colorscheme gruber-darker")
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
+
+require("telescope").setup({
+    pickers = {
+        find_files = {
+            hidden = true,
+        },
+    },
+})
+local builtin = require("telescope.builtin")
+vim.keymap.set("n", "<leader>ff", builtin.find_files)
+vim.keymap.set("n", "<leader>fg", builtin.git_files)
+vim.keymap.set("n", "<leader>fs", function()
+    builtin.grep_string({ search = vim.fn.input("Grep > ") })
+end)
+
+
+require("nvim-treesitter.configs").setup({
+    ensure_installed = {},
+    sync_install = false,
+    auto_install = true,
+    indent = { enable = true },
+    highlight = {
+        enable = true,
+        disable = function(_, buf)
+            local max_filesize = 100 * 1024 -- 100 KB
+            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+            if ok and stats and stats.size > max_filesize then
+                vim.notify(
+                    "File larger than 100KB treesitter disabled for performance",
+                    vim.log.levels.WARN,
+                    { title = "Treesitter" }
+                )
+                return true
+            end
+        end,
+        additional_vim_regex_highlighting = { "markdown" },
+    },
+})
+
+require("oil").setup({
+    view_options = {
+        show_hidden = true
+    },
+})
+vim.keymap.set("n", "-", "<CMD>Oil<CR>")
+
+vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+
+vim.keymap.set("n", "<leader>zz", function()
+    require("zen-mode").setup {
+        window = {
+            width = 90,
+            options = {}
+        },
+    }
+
+    require("zen-mode").toggle()
+    vim.wo.wrap = false
+    vim.wo.number = true
+    vim.wo.rnu = true
+end)
 
 vim.lsp.config["clangd"] = {
     cmd = { "clangd" },
@@ -211,13 +176,7 @@ vim.lsp.config["rust_analyzer"] = {
     }
 }
 
-vim.lsp.config["ts_ls"] = {
-    cmd = { "typescript-language-server", "--stdio" },
-    filetypes = { "typescript", "javascript" },
-    root_markers = { "" }
-}
-
-vim.lsp.enable({ "clangd", "rust_analyzer", "ts_ls" })
+vim.lsp.enable({ "clangd", "rust_analyzer" })
 
 vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 

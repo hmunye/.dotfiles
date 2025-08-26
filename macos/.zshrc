@@ -1,3 +1,4 @@
+export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 
@@ -20,8 +21,8 @@ bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
 alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-alias gcc='gcc-14'
+alias grep='rg --color=auto'
+# alias gcc='gcc-14'
 alias vim='nvim'
 alias python='python3'
 

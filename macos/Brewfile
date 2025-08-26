@@ -1,10 +1,9 @@
+tap "neovim/neovim"
 brew "fzf"
-brew "gcc"
 brew "htop"
-brew "neovim"
+brew "neovim", args: ["HEAD"]
+brew "ripgrep"
 brew "rustup"
 brew "starship"
 brew "tmux"
 cask "font-iosevka-term-nerd-font"
-cask "ghostty"
-cask "maccy"
