@@ -52,15 +52,10 @@ vim.pack.add({
     {
         src = "https://github.com/behemothbucket/gruber-darker-theme.nvim",
         name = "gruber-darker",
-        version = "main",
     },
     {
         src = "https://github.com/nvim-telescope/telescope.nvim",
         name = "nvim-telescope",
-    },
-    {
-        src = "https://github.com/nvim-lua/plenary.nvim",
-        name = "plenary",
     },
     {
         src = "https://github.com/nvim-treesitter/nvim-treesitter",
@@ -78,7 +73,23 @@ vim.pack.add({
     {
         src = "https://github.com/folke/zen-mode.nvim",
         name = "zen-mode",
-        version = "main",
+    },
+    {
+        src = "https://github.com/mfussenegger/nvim-dap",
+        name = "nvim-dap",
+    },
+    -- dependencies
+    {
+        src = "https://github.com/nvim-lua/plenary.nvim",
+        name = "plenary",
+    },
+    {
+        src = "https://github.com/rcarriga/nvim-dap-ui",
+        name = "nvim-dap-ui",
+    },
+    {
+        src = "https://github.com/nvim-neotest/nvim-nio",
+        name = "nvim-nio",
     },
 })
 
@@ -156,6 +167,78 @@ vim.keymap.set("n", "<leader>zz", function()
     vim.wo.number = true
     vim.wo.rnu = true
 end)
+
+local dap, dapui = require("dap"), require("dapui")
+dapui.setup({
+    controls = {
+        enabled = false,
+    },
+})
+
+dap.listeners.before.attach.dapui_config = function()
+    dapui.open()
+end
+dap.listeners.before.launch.dapui_config = function()
+    dapui.open()
+end
+dap.listeners.before.event_terminated.dapui_config = function()
+    dapui.close()
+end
+dap.listeners.before.event_exited.dapui_config = function()
+    dapui.close()
+end
+
+dap.adapters.lldb = {
+    type = "executable",
+    command = "/usr/bin/codelldb",
+    name = "lldb",
+}
+
+dap.configurations.c = {
+    {
+        name = "Launch With LLDB",
+        type = "lldb",
+        request = "launch",
+        program = function()
+            return vim.fn.input("Executable: ", vim.fn.getcwd() .. "/", "file")
+        end,
+        cwd = "${workspaceFolder}",
+        stopOnEntry = false,
+        args = function()
+            return vim.split(vim.fn.input("Arguments: "), " ")
+        end,
+        runInTerminal = true,
+    },
+}
+
+dap.configurations.rust = {
+    {
+        name = "Debug Rust with LLDB",
+        type = "lldb",
+        request = "launch",
+        program = function()
+            return vim.fn.input("Executable: ", vim.fn.getcwd() .. "/", "file")
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = function()
+            return vim.split(vim.fn.input("Arguments: "), " ")
+        end,
+        runInTerminal = true,
+        initCommands = function()
+          return {
+            'settings set target.process.thread.step-avoid-regexp "rustlib/.*|core::.*|alloc::.*|std::.*|__.*|llvm::.*"'
+          }
+        end
+    },
+}
+
+vim.keymap.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<CR>")
+vim.keymap.set("n", "<leader>dc", "<cmd>DapClearBreakpoints<CR>")
+vim.keymap.set("n", "<leader>dr", "<cmd>DapContinue<CR>")
+vim.keymap.set("n", "<leader>dt", "<cmd>DapTerminate<CR>")
+vim.keymap.set("n", "<C-s>", "<cmd>DapStepOver<CR>")
+vim.keymap.set("n", "<C-S>", "<cmd>DapStepInto<CR>")
 
 vim.lsp.config["clangd"] = {
     cmd = { "clangd" },
