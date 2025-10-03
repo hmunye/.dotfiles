@@ -13,6 +13,8 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
+vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
 
 vim.opt.mouse = "a"
 vim.opt.guicursor = ""
@@ -159,7 +161,15 @@ end)
 vim.lsp.config["clangd"] = {
     cmd = { "clangd" },
     filetypes = { "c", "cpp" },
-    root_markers = { "" }
+    root_markers = { "" },
+    settings = {}
+}
+
+vim.lsp.config["gopls"] = {
+    cmd = { "gopls" },
+    filetypes = { "go" },
+    root_markers = { "go.mod" },
+    settings = {}
 }
 
 vim.lsp.config["rust_analyzer"] = {
@@ -169,27 +179,31 @@ vim.lsp.config["rust_analyzer"] = {
     settings = {
         ["rust_analyzer"] = {
             cargo = {
+                features = "all",
                 allFeatures = true,
             },
+            procMacro = {
+                enable = true
+            }
         }
     }
 }
 
-vim.lsp.enable({ "clangd", "rust_analyzer" })
+vim.lsp.enable({ "clangd", "gopls", "rust_analyzer" })
 
 vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 
---            vim.diagnostic.config({
---                float = {
---                    focusable = false,
---                    style = "minimal",
---                    border = "rounded",
---                    source = true,
---                    header = "",
---                    prefix = "",
---                },
---                virtual_text = true,
---            })
+-- vim.diagnostic.config({
+--     float = {
+--         focusable = false,
+--         style = "minimal",
+--         border = "rounded",
+--         source = true,
+--         header = "",
+--         prefix = "",
+--     },
+--     virtual_text = true,
+-- })
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd

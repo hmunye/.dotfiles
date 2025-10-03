@@ -1,7 +1,10 @@
 [[ $- != *i* ]] && return
 
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$PATH:$HOME/.go/bin"
+
+export GOPATH="$HOME/.go/"
 
 export EDITOR="nvim"
 export MANPAGER="nvim +Man!"
