@@ -47,9 +47,6 @@ vim.opt.spelllang = "en_us"
 vim.opt.spell = true
 vim.opt.spellfile = os.getenv("HOME") .. "/.config/nvim/spell/en.add"
 
--- Built-in auto-completion fix
--- vim.cmd("set completeopt+=noselect")
-
 vim.pack.add({
     {
         src = "https://github.com/behemothbucket/gruber-darker-theme.nvim",
@@ -179,7 +176,6 @@ vim.lsp.config["rust_analyzer"] = {
     settings = {
         ["rust_analyzer"] = {
             cargo = {
-                features = "all",
                 allFeatures = true,
             },
             procMacro = {
@@ -190,20 +186,7 @@ vim.lsp.config["rust_analyzer"] = {
 }
 
 vim.lsp.enable({ "clangd", "gopls", "rust_analyzer" })
-
 vim.diagnostic.enable(not vim.diagnostic.is_enabled())
-
--- vim.diagnostic.config({
---     float = {
---         focusable = false,
---         style = "minimal",
---         border = "rounded",
---         source = true,
---         header = "",
---         prefix = "",
---     },
---     virtual_text = true,
--- })
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
@@ -252,10 +235,6 @@ autocmd("LspAttach", {
                 end,
             })
         end
-
-        --        if client:supports_method('textDocument/completion') then
-        --            vim.lsp.completion.enable(true, client.id, e.buf, { autotrigger = true })
-        --        end
     end,
 })
 
