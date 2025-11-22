@@ -1,6 +1,7 @@
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
+export PATH="$HOME/.node/current/bin:$PATH"
 
 export HOMEBREW_NO_EMOJI=1
 export HOMEBREW_NO_AUTO_UPDATE=1
