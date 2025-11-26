@@ -185,7 +185,23 @@ vim.lsp.config["rust_analyzer"] = {
     }
 }
 
-vim.lsp.enable({ "clangd", "gopls", "rust_analyzer" })
+vim.lsp.config["pyright"] = {
+    cmd = { "pyright-langserver", "--stdio" },
+    filetypes = { "python" },
+    root_markers = { "" },
+    settings = {
+        python = {
+            analysis = {
+                autoSearchPaths = true,
+                diagnosticMode = "workspace",
+                useLibraryCodeForTypes = true
+            }
+        }
+    }
+}
+
+vim.lsp.enable({ "clangd", "gopls", "rust_analyzer", "pyright" })
+
 vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 
 local augroup = vim.api.nvim_create_augroup

@@ -1,9 +1,12 @@
-BasedOnStyle: LLVM   
+BasedOnStyle: LLVM
 IndentWidth: 4
 ColumnLimit: 80
 TabWidth: 4
 UseTab: Never
 BreakBeforeBraces: Attach
-AllowShortFunctionsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: true
 SortIncludes: false
 IndentPPDirectives: BeforeHash 
+# SpaceBeforeCpp11BracedList: true
+Cpp11BracedListStyle: false
+IndentCaseLabels: true
