@@ -8,3 +8,5 @@
 	ui = auto
 [core]
 	excludesfile = ~/.dotfiles/.gitignore_global
+[pull]
+	rebase = true
