@@ -49,8 +49,8 @@ vim.opt.spellfile = os.getenv("HOME") .. "/.config/nvim/spell/en.add"
 
 vim.pack.add({
     {
-        src = "https://github.com/rose-pine/neovim",
-        name = "rose-pine",
+        src = "https://github.com/behemothbucket/gruber-darker-theme.nvim",
+        name = "gruber-darker",
     },
     {
         src = "https://github.com/nvim-telescope/telescope.nvim",
@@ -80,7 +80,7 @@ vim.pack.add({
     },
 })
 
-vim.cmd("packadd rose-pine")
+vim.cmd("packadd gruber-darker")
 vim.cmd("packadd nvim-telescope")
 vim.cmd("packadd plenary")
 vim.cmd("packadd nvim-treesitter")
@@ -88,33 +88,11 @@ vim.cmd("packadd oil-nvim")
 vim.cmd("packadd undotree")
 vim.cmd("packadd zen-mode")
 
-require("rose-pine").setup({
-    variant = "auto",
-    dark_variant = "main",
-    dim_inactive_windows = false,
-    extend_background_behind_borders = true,
-    enable = {
-        terminal = true,
-        legacy_highlights = true,
-        migrations = true,
-    },
-    styles = {
-        bold = true,
-        italic = false,
-        transparency = true,
-    },
-    highlight_groups = {
-		ColorColumn = { bg = "muted", blend = 30 },
-    },
-})
-
-vim.cmd("colorscheme rose-pine")
--- vim.cmd("colorscheme rose-pine-main")
--- vim.cmd("colorscheme rose-pine-moon")
--- vim.cmd("colorscheme rose-pine-dawn")
-vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
-vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE" })
+require("gruber-darker").setup()
+vim.cmd("colorscheme gruber-darker")
+-- vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
+-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
+-- vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE" })
 
 require("telescope").setup({
     pickers = {
@@ -157,6 +135,12 @@ require("nvim-treesitter.configs").setup({
 require("oil").setup({
     view_options = {
         show_hidden = true
+    },
+    float = {
+        border = "rounded"
+    },
+    confirmation = {
+        border = "rounded"
     },
 })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>")
