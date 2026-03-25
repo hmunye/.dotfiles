@@ -7,6 +7,9 @@ BreakBeforeBraces: Attach
 AllowShortFunctionsOnASingleLine: false
 SortIncludes: false
 IndentPPDirectives: BeforeHash 
-# SpaceBeforeCpp11BracedList: true
-Cpp11BracedListStyle: false
+SpaceBeforeCpp11BracedList: false
+Cpp11BracedListStyle: true
 IndentCaseLabels: true
+AlwaysBreakTemplateDeclarations: Yes
+PointerAlignment: Left
+ReferenceAlignment: Left

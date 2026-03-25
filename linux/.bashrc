@@ -2,15 +2,11 @@
 
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
-export PATH="$PATH:$HOME/.go/bin"
-export PATH="$PATH:$HOME/.node/current/bin"
-
-export GOPATH="$HOME/.go/"
 
 export EDITOR="nvim"
 export MANPAGER="nvim +Man!"
-
-bind '"\C-f": "~/.dotfiles/.local/bin/tmux-session.sh\n"'
+export OLLAMA_NO_CLOUD=1
+export OLLAMA_KV_CACHE_TYPE=f16
 
 HISTFILE=$HOME/.bash_history      
 SAVEHIST=1000                        
@@ -20,6 +16,7 @@ shopt -s histappend
 PROMPT_COMMAND="history -a; history -n"
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
+bind '"\C-f": "~/.dotfiles/.local/bin/tmux-session.sh\n"'
 
 alias ls='ls --color=auto'
 alias grep='rg --color=always'

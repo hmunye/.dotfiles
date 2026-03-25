@@ -121,7 +121,7 @@ require("nvim-treesitter").setup({
             local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
             if ok and stats and stats.size > max_filesize then
                 vim.notify(
-                    "File larger than 100KB treesitter disabled for performance",
+                    "File larger than 100KB: treesitter disabled for performance",
                     vim.log.levels.WARN,
                     { title = "Treesitter" }
                 )
@@ -133,6 +133,11 @@ require("nvim-treesitter").setup({
 })
 
 require("oil").setup({
+    columns = {
+        -- "permissions",
+        -- "size",
+        -- "mtime",
+    },
     view_options = {
         show_hidden = true
     },
@@ -161,20 +166,6 @@ vim.keymap.set("n", "<leader>zz", function()
     vim.wo.rnu = true
 end)
 
-vim.lsp.config["clangd"] = {
-    cmd = { "clangd" },
-    filetypes = { "c", "cpp" },
-    root_markers = { "" },
-    settings = {}
-}
-
-vim.lsp.config["gopls"] = {
-    cmd = { "gopls" },
-    filetypes = { "go" },
-    root_markers = { "go.mod" },
-    settings = {}
-}
-
 vim.lsp.config["rust_analyzer"] = {
     cmd = { "rustup", "run", "stable", "rust-analyzer" },
     filetypes = { "rust" },
@@ -191,22 +182,15 @@ vim.lsp.config["rust_analyzer"] = {
     }
 }
 
-vim.lsp.config["pyright"] = {
-    cmd = { "pyright-langserver", "--stdio" },
-    filetypes = { "python" },
+
+vim.lsp.config["clangd"] = {
+    cmd = { "clangd" },
+    filetypes = { "c", "cpp" },
     root_markers = { "" },
-    settings = {
-        python = {
-            analysis = {
-                autoSearchPaths = true,
-                diagnosticMode = "workspace",
-                useLibraryCodeForTypes = true
-            }
-        }
-    }
+    settings = {}
 }
 
-vim.lsp.enable({ "clangd", "gopls", "rust_analyzer", "pyright" })
+vim.lsp.enable({ "rust_analyzer", "clangd" })
 
 vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 

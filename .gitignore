@@ -1,6 +1,5 @@
-.config/nvim/spell/
-.config/nvim/lazy-lock.json
+.config/nvim/spell/en.add
+.config/nvim/spell/en.add.spl
 .config/nvim/nvim-pack-lock.json
 .local/bin/uv
 .local/bin/uvx
-.local/bin/hxx
