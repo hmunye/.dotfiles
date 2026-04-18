@@ -2,10 +2,10 @@
 
 set -euo pipefail
 
-trap "docker stop open-webui >/dev/null" EXIT SIGINT SIGTERM
+trap "docker stop open-webui searxng >/dev/null || true" EXIT SIGINT SIGTERM
 
 if docker ps -a --format '{{.Names}}' | grep -q '^open-webui$'; then
-    docker start open-webui >/dev/null || true
+    docker start open-webui >/dev/null
 else
     mkdir -p "$HOME/.open-webui"
 
@@ -19,7 +19,25 @@ else
       >/dev/null
 fi
 
-while ! nc -z localhost 8080 >/dev/null; do
+if docker ps -a --format '{{.Names}}' | grep -q '^searxng$'; then
+    docker start searxng >/dev/null
+else
+    mkdir -p "$HOME/.searxng"
+
+    docker run -d \
+      -p 127.0.0.1:8081:8080 \
+      -v "$HOME/.searxng:/etc/searxng:rw" \
+      --name searxng \
+      --restart unless-stopped \
+      searxng/searxng:latest \
+      >/dev/null
+fi
+
+while ! nc -z -w 1 localhost 8080 >/dev/null 2>&1; do
+    sleep 0.5
+done
+
+while ! nc -z -w 1 localhost 8081 >/dev/null 2>&1; do
     sleep 0.5
 done
 
@@ -29,4 +47,4 @@ else
     echo -e "\n-> http://localhost:8080\n"
 fi
 
-OLLAMA_CONTEXT_LENGTH=32000 ollama serve
+ollama serve

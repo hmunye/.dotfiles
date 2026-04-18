@@ -5,8 +5,11 @@ export PATH="$PATH:$HOME/.cargo/bin"
 
 export EDITOR="nvim"
 export MANPAGER="nvim +Man!"
+
 export OLLAMA_NO_CLOUD=1
-export OLLAMA_KV_CACHE_TYPE=f16
+export OLLAMA_KV_CACHE_TYPE=q4_0
+export OLLAMA_FLASH_ATTENTION=1
+export OLLAMA_CONTEXT_LENGTH=16834
 
 HISTFILE=$HOME/.bash_history      
 SAVEHIST=1000                        
