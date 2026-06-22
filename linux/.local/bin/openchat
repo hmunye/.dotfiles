@@ -2,6 +2,63 @@
 
 set -euo pipefail
 
+# MOE Models (MTP)
+# LLAMA_CMD=(
+#     llama-server --port 8082
+#     -t 16
+#     -c 0
+#     -b 4096
+#     -ub 1024
+#     -fa on
+#     -ctk q8_0
+#     -ctv q8_0
+#     -ncmoe 30
+#     -ngl 999
+#     --offline
+#     --repeat-penalty 1.0
+#     --presence-penalty 1.5
+#     -np 1
+#     --no-mmproj
+#     --chat-template-kwargs '{"preserve_thinking": true}'
+#     --no-ui
+#     --spec-type draft-mtp
+#     --spec-draft-n-max 2
+# )
+
+# Non-MOE Models (MTP)
+LLAMA_CMD=(
+    llama-server --port 8082
+    -t 16
+    -c 0
+    -b 3072
+    -ub 1024
+    -fa on
+    -ctk q8_0
+    -ctv q8_0
+    -ngl 45
+    --offline
+    --repeat-penalty 1.0
+    --presence-penalty 1.5
+    -np 1
+    --no-mmproj
+    --chat-template-kwargs '{"preserve_thinking": true}'
+    --spec-type draft-mtp
+    --spec-draft-n-max 2
+)
+
+SERVER_ONLY=false
+for arg in "$@"; do
+    if [[ "$arg" == "--server-only" ]]; then
+        SERVER_ONLY=true
+        break
+    fi
+done
+
+if [ "$SERVER_ONLY" = true ]; then
+    xdg-open http://localhost:8082 && "${LLAMA_CMD[@]}"
+    exit 0
+fi
+
 trap "docker stop open-webui searxng >/dev/null || true" EXIT SIGINT SIGTERM
 
 if docker ps -a --format '{{.Names}}' | grep -q '^open-webui$'; then
@@ -12,10 +69,9 @@ else
     docker run -d \
       --network=host \
       -v "$HOME/.open-webui:/app/backend/data" \
-      -e OLLAMA_BASE_URL=http://127.0.0.1:11434 \
       --name open-webui \
-      --restart always \
-      ghcr.io/open-webui/open-webui:main \
+      --restart unless-stopped \
+      ghcr.io/open-webui/open-webui:dev \
       >/dev/null
 fi
 
@@ -37,14 +93,10 @@ while ! nc -z -w 1 localhost 8080 >/dev/null 2>&1; do
     sleep 0.5
 done
 
-while ! nc -z -w 1 localhost 8081 >/dev/null 2>&1; do
-    sleep 0.5
-done
-
 if command -v xdg-open >/dev/null; then
     xdg-open http://localhost:8080
 else
     echo -e "\n-> http://localhost:8080\n"
 fi
 
-ollama serve
+"${LLAMA_CMD[@]}"

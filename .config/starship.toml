@@ -18,6 +18,7 @@ $golang\
 $lua\
 $nodejs\
 $ocaml\
+$odin\
 $python\
 $rust\
 $scala\
@@ -115,6 +116,10 @@ symbol = " "
 [nodejs]
 format = '\[[$symbol($version)]($style)\] '
 symbol = " "
+
+[odin]
+format = '\[[$symbol($version)]($style)\] '
+symbol = "Ø "
 
 [ocaml]
 format = '\[[$symbol($version)(\($switch_indicator$switch_name\))]($style)\] '

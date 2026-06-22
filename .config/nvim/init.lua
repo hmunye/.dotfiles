@@ -57,11 +57,6 @@ vim.pack.add({
         name = "nvim-telescope",
     },
     {
-        src = "https://github.com/nvim-treesitter/nvim-treesitter",
-        name = "nvim-treesitter",
-        build = ":TSUpdate",
-    },
-    {
         src = "https://github.com/stevearc/oil.nvim",
         name = "oil-nvim",
     },
@@ -82,17 +77,21 @@ vim.pack.add({
 
 vim.cmd("packadd gruber-darker")
 vim.cmd("packadd nvim-telescope")
-vim.cmd("packadd plenary")
-vim.cmd("packadd nvim-treesitter")
 vim.cmd("packadd oil-nvim")
 vim.cmd("packadd undotree")
 vim.cmd("packadd zen-mode")
+vim.cmd("packadd plenary")
+
+-- ===============  colorscheme  ===================
 
 require("gruber-darker").setup()
 vim.cmd("colorscheme gruber-darker")
+
 -- vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
 -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
 -- vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE" })
+
+-- ===============  telescope.nvim  ===================
 
 require("telescope").setup({
     pickers = {
@@ -101,41 +100,21 @@ require("telescope").setup({
         },
     },
 })
+
 local builtin = require("telescope.builtin")
+
 vim.keymap.set("n", "<leader>ff", builtin.find_files)
 vim.keymap.set("n", "<leader>fg", builtin.git_files)
 vim.keymap.set("n", "<leader>fs", function()
-    builtin.grep_string({ search = vim.fn.input("Grep > ") })
+    builtin.grep_string({ search = vim.fn.input("Grep ❯ ") })
 end)
 
-
-require("nvim-treesitter").setup({
-    ensure_installed = {},
-    sync_install = false,
-    auto_install = true,
-    indent = { enable = true },
-    highlight = {
-        enable = true,
-        disable = function(_, buf)
-            local max_filesize = 100 * 1024 -- 100 KB
-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-            if ok and stats and stats.size > max_filesize then
-                vim.notify(
-                    "File larger than 100KB: treesitter disabled for performance",
-                    vim.log.levels.WARN,
-                    { title = "Treesitter" }
-                )
-                return true
-            end
-        end,
-        additional_vim_regex_highlighting = { "markdown" },
-    },
-})
+-- ===============  oil  ===================
 
 require("oil").setup({
     columns = {
-        -- "permissions",
-        -- "size",
+        "permissions",
+        "size",
         -- "mtime",
     },
     view_options = {
@@ -150,7 +129,11 @@ require("oil").setup({
 })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>")
 
+-- ===============  undotree  ===================
+
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+
+-- ===============  zen-mode  ===================
 
 vim.keymap.set("n", "<leader>zz", function()
     require("zen-mode").setup {
@@ -165,6 +148,8 @@ vim.keymap.set("n", "<leader>zz", function()
     vim.wo.number = true
     vim.wo.rnu = true
 end)
+
+-- ===============  LSP  ===================
 
 vim.lsp.config["rust_analyzer"] = {
     cmd = { "rustup", "run", "stable", "rust-analyzer" },
@@ -182,6 +167,19 @@ vim.lsp.config["rust_analyzer"] = {
     }
 }
 
+vim.lsp.config["gopls"] = {
+    cmd = { "gopls" },
+    filetypes = { "go" },
+    root_markers = { "go.mod" },
+    settings = {}
+}
+
+vim.lsp.config["ols"] = {
+    cmd = { "ols" },
+    filetypes = { "odin" },
+    root_markers = { "" },
+    settings = {}
+}
 
 vim.lsp.config["clangd"] = {
     cmd = { "clangd" },
@@ -190,9 +188,17 @@ vim.lsp.config["clangd"] = {
     settings = {}
 }
 
-vim.lsp.enable({ "rust_analyzer", "clangd" })
+vim.lsp.config["tsserver"] = {
+    cmd = { "typescript-language-server", "--stdio" },
+    filetypes = { "javascript", "typescript" },
+    root_markers = { "package.json" },
+    settings = {}
+}
 
+vim.lsp.enable({ "rust_analyzer", "gopls", "ols", "clangd", "tsserver" })
 vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+
+-- ===============  autocmds  ===================
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
@@ -248,7 +254,7 @@ autocmd("TextYankPost", {
     group = yank_group,
     pattern = "*",
     callback = function()
-        vim.highlight.on_yank({
+        vim.highlight.hl_op({
             higroup = "IncSearch",
             timeout = 40,
         })
