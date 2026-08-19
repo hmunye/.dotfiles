@@ -28,7 +28,7 @@ __rfc() {
     local ISSUES_URL='https://github.com/bfontaine/rfc/issues'
 
     local RFCS_TGZ_BASEURL='https://www.rfc-editor.org/in-notes/tar/'
-    local RFCS_BASEURL='https://www.rfc-editor.org/rfc/'
+    local RFCS_BASEURL='https://www.rfc-editor.org/rfc'
     local DRAFTS_BASEURL='https://www.ietf.org/id/'
 
     if [ -n "$RFC_DIR" ]; then

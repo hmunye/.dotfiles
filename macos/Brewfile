@@ -1,7 +1,6 @@
-tap "neovim/neovim"
 brew "fzf"
 brew "htop"
-brew "neovim", args: ["HEAD"]
+brew "neovim"
 brew "ripgrep"
 brew "rustup"
 brew "starship"

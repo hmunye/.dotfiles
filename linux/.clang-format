@@ -8,7 +8,7 @@ AllowShortFunctionsOnASingleLine: false
 SortIncludes: false
 IndentPPDirectives: BeforeHash 
 SpaceBeforeCpp11BracedList: false
-Cpp11BracedListStyle: true
+Cpp11BracedListStyle: false
 IndentCaseLabels: true
 AlwaysBreakTemplateDeclarations: Yes
 PointerAlignment: Left
