@@ -10,9 +10,6 @@ export PATH="$PATH:$GOPATH/bin"
 export EDITOR="nvim"
 export MANPAGER="nvim +Man!"
 
-export HF_HOME="$HOME/.llama/models"
-export GGML_CUDA_ENABLE_UNIFIED_MEMORY=1
-
 HISTFILE=$HOME/.bash_history      
 SAVEHIST=1000                        
 HISTSIZE=999                      
@@ -25,7 +22,8 @@ bind '"\e[B": history-search-forward'
 bind '"\C-f": "~/.dotfiles/.local/bin/tmux-session.sh\n"'
 
 alias ls='ls --color=auto'
-alias grep='rg --color=auto'
+# alias grep='rg --color=auto'
+alias grep='grep --color=auto'
 alias vim='nvim'
 
 eval "$(fzf --bash)"
