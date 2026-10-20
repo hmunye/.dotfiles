@@ -1,7 +1,6 @@
 brew "fzf"
 brew "htop"
 brew "neovim"
-brew "ripgrep"
 brew "rustup"
 brew "starship"
 brew "tmux"
