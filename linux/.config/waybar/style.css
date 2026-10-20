@@ -43,7 +43,8 @@ tooltip {
 #wireplumber,
 #clock,
 #privacy,
-#tray {
+#tray,
+#custom-vm {
     padding: 3px 8px;
     margin: 5px 5px; 
 }
@@ -54,8 +55,17 @@ tooltip {
 #wireplumber,
 #clock,
 #privacy,
-#tray {
+#tray,
+#custom-vm {
     color: #FEFFED;
+}
+
+#custom-vm {
+    color: #00A4EF;
+}
+
+#custom-vm:hover {
+    color: #7CC7FF;
 }
 
 #network.disconnected {

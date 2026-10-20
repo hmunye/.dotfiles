@@ -3,11 +3,16 @@
     "position": "bottom",
     "reload_style_on_change" : true,
     "modules-left": ["hyprland/workspaces"],
-    "modules-right": ["network", "cpu", "memory", "bluetooth", "wireplumber", "clock", "privacy", "tray"],
+    "modules-right": ["custom/vm", "network", "cpu", "memory", "bluetooth", "wireplumber", "clock", "privacy", "tray"],
     "hyprland/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
         "format": "{name}"
+    },
+    "custom/vm": {
+        "format": "󰍲",
+        "tooltip-format": "Virtual Machine",
+        "on-click": "~/.local/bin/vm.sh"
     },
     "network": {
         "format-wifi": "{ipaddr}/{cidr}  ",
